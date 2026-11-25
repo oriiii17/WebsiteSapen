@@ -1,6 +1,7 @@
 "use client";
 
 import "./admin-berita.css";
+import { useSiteFeedback } from "../../../components/site-feedback";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { 
@@ -9,8 +10,6 @@ import {
   Trash2, 
   Save, 
   ArrowLeft, 
-  CheckCircle2, 
-  AlertCircle,
   RefreshCw,
   UploadCloud,
   FileText,
@@ -89,7 +88,7 @@ export default function AdminBeritaPastiGantiFoto() {
   const [beritaList, setBeritaList] = useState<BeritaItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [notification, setNotification] = useState<{ text: string; error?: boolean } | null>(null);
+  const { notify, askConfirmation } = useSiteFeedback();
 
   // Form State
   const [isEditing, setIsEditing] = useState(false);
@@ -116,6 +115,7 @@ export default function AdminBeritaPastiGantiFoto() {
       setBeritaList(result.data || []);
     } catch (e: any) {
       console.error("Gagal mengambil data:", e.message);
+      notify("Gagal memuat daftar berita. Periksa koneksi lalu coba lagi.", "error");
     } finally {
       setLoading(false);
     }
@@ -166,12 +166,11 @@ export default function AdminBeritaPastiGantiFoto() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !excerpt.trim() || !content.trim()) {
-      setNotification({ text: "Mohon isi Judul, Ringkasan, dan Isi Artikel!", error: true });
+      notify("Judul, ringkasan, dan isi berita perlu diisi sebelum disimpan.", "error");
       return;
     }
 
     setIsSubmitting(true);
-    setNotification(null);
 
     try {
       let finalPhotoData = imagePreview || DEFAULT_FALLBACK_IMAGE;
@@ -207,7 +206,7 @@ export default function AdminBeritaPastiGantiFoto() {
           prev.map((b) => (b.id === editId ? { ...b, title, image: finalPhotoData, category, excerpt } : b))
         );
 
-        setNotification({ text: "✓ Foto thumbnail & berita berhasil diperbarui 100%!" });
+        notify("Berita berhasil diperbarui.", "success");
       } else {
         // Buat Berita Baru
         const response = await fetch("/api/berita", {
@@ -228,32 +227,36 @@ export default function AdminBeritaPastiGantiFoto() {
         });
         const result = await response.json();
         if (!response.ok || !result.success) throw new Error(result.message || "Gagal menyimpan berita.");
-        setNotification({ text: "✓ Berita baru & foto berhasil tersimpan di database!" });
+        notify("Berita berhasil diterbitkan.", "success");
       }
 
       resetForm();
       await fetchBerita();
       setActiveTab("list");
-    } catch (err: any) {
-      setNotification({ text: err.message || "Gagal menyimpan perubahan.", error: true });
+    } catch {
+      notify("Gagal menyimpan berita. Periksa koneksi lalu coba lagi.", "error");
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setNotification(null), 5000);
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("Apakah Anda yakin ingin menghapus berita ini dari database?")) return;
+  const handleDelete = async (id: number, title: string) => {
+    const accepted = await askConfirmation({
+      title: `Hapus berita '${title}'?`,
+      description: "Tindakan ini tidak bisa dibatalkan.",
+      confirmLabel: "Hapus berita",
+      danger: true,
+    });
+    if (!accepted) return;
     try {
       const response = await fetch(`/api/berita?id=${encodeURIComponent(id)}`, { method: "DELETE" });
       const result = await response.json();
       if (!response.ok || !result.success) throw new Error(result.message || "Gagal menghapus berita.");
       setBeritaList((prev) => prev.filter((b) => b.id !== id));
-      setNotification({ text: "Berita berhasil dihapus dari database." });
-    } catch (e: any) {
-      setNotification({ text: "Gagal menghapus berita: " + e.message, error: true });
+      notify("Berita berhasil dihapus.", "success");
+    } catch {
+      notify("Gagal menghapus berita. Periksa koneksi lalu coba lagi.", "error");
     }
-    setTimeout(() => setNotification(null), 3000);
   };
 
   const cleanList = Array.isArray(beritaList) ? beritaList : [];
@@ -284,26 +287,6 @@ export default function AdminBeritaPastiGantiFoto() {
       {/* CONTAINER FORMULIR LEBAR */}
       <main className="admin-news-main">
         
-        {/* TOAST NOTIFIKASI */}
-        {notification && (
-          <div className={`admin-news-notice${notification.error ? " is-error" : " is-success"}`} style={{ 
-            background: notification.error ? "#fef2f2" : "#f0fdf4", 
-            border: `1.5px solid ${notification.error ? "#f87171" : "#86efac"}`, 
-            color: notification.error ? "#dc2626" : "#15803d",
-            padding: "14px 20px", 
-            borderRadius: "12px", 
-            marginBottom: "24px",
-            fontSize: "14px",
-            fontWeight: 800,
-            display: "flex",
-            alignItems: "center",
-            gap: "10px"
-          }}>
-            {notification.error ? <AlertCircle style={{ width: 20, height: 20 }} /> : <CheckCircle2 style={{ width: 20, height: 20 }} />}
-            <span>{notification.text}</span>
-          </div>
-        )}
-
         {/* TAB PILIHAN */}
         <div className="admin-news-tabs" role="tablist" aria-label="Bagian pengelolaan berita">
           <button
@@ -587,7 +570,7 @@ export default function AdminBeritaPastiGantiFoto() {
                       </button>
 
                       <button
-                        onClick={() => handleDelete(item.id)}
+                        onClick={() => handleDelete(item.id, item.title)}
                         className="admin-news-action is-delete"
                       >
                         <Trash2 aria-hidden="true" size={16} /> Hapus

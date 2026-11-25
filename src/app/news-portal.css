@@ -7,7 +7,9 @@
   --news-line: #d7dee8;
   --news-paper: #ffffff;
   --news-wash: #f3f6fa;
-  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background: var(--news-paper);
   background-image: none;
   color: var(--news-ink);
@@ -39,7 +41,7 @@
 .news-admin-bar > div { display: flex; align-items: center; gap: 18px; }
 .news-admin-bar a, .news-admin-bar button { min-height: 40px; display: inline-flex; align-items: center; gap: 6px; border: 0; color: var(--news-blue-deep); background: transparent; font-weight: 700; cursor: pointer; }
 
-.news-main { width: min(1000px,calc(100% - 40px)); margin: 0 auto; }
+.news-main { width: min(1000px,calc(100% - 40px)); flex: 1 0 auto; margin: 0 auto; }
 .news-categories { min-height: 65px; display: flex; align-items: center; gap: 8px; overflow-x: auto; border-bottom: 1px solid var(--news-line); scrollbar-width: thin; }
 .news-categories button { min-height: 38px; flex: 0 0 auto; padding: 7px 13px; border: 1px solid transparent; border-radius: 5px; color: #34465d; background: transparent; font-size: .93rem; font-weight: 700; white-space: nowrap; cursor: pointer; }
 .news-categories button:hover { background: #edf3fb; color: var(--news-navy); }

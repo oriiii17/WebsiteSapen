@@ -6,6 +6,7 @@
 
 html {
   scroll-behavior: smooth;
+  min-height: 100%;
 }
 
 /* MENGUNCI LATAR BELAKANG PUTIH BERSIH & CERAH */
@@ -13,7 +14,9 @@ body {
   background-color: #f8fafc !important;
   color: #0f172a !important;
   font-family: var(--font-atkinson), Arial, sans-serif !important;
-  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
   background-image: 
     radial-gradient(at 0% 0%, rgba(224, 242, 254, 0.5) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(219, 234, 254, 0.4) 0px, transparent 50%) !important;

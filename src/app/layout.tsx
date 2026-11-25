@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SiteFeedbackProvider } from "../components/site-feedback";
 
 const atkinson = localFont({
   src: [
@@ -25,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className={`${atkinson.className} ${atkinson.variable} bg-slate-50 text-slate-900 antialiased min-h-screen`}>
-        {children}
+        <SiteFeedbackProvider>{children}</SiteFeedbackProvider>
       {/* impeccable-live-start */}
 <Script src="http://localhost:8400/live.js?token=c90f335a-ddaf-4793-8873-386dcc046db3" strategy="afterInteractive" />
 {/* impeccable-live-end */}

@@ -188,7 +188,7 @@ export default function PortalKampungSapen() {
                       <span className="news-meta"><b>{story.category || "Berita Warga"}</b><time>{story.date || "Terbaru"}</time></span>
                     </span>
                   </Link>
-                )) : <p className="news-list__empty">Tidak ada berita lain untuk pencarian ini.</p>}
+                )) : <p className="news-list__empty">Belum ada berita lainnya.</p>}
                 {hasMore && (
                   <button className="news-load-more" type="button" onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}>
                     Muat 10 berita lagi
@@ -197,12 +197,12 @@ export default function PortalKampungSapen() {
               </section>
             </>
           ) : (
-            <div className="news-empty"><h1>Berita tidak ditemukan</h1><p>Coba kata kunci atau kategori lain.</p></div>
+            <div className="news-empty"><h1>Berita tidak ditemukan</h1><p>{query.trim() ? `Tidak ada berita yang cocok dengan '${query.trim()}'.` : "Belum ada berita lainnya."}</p></div>
           )}
         </section>
       </main>
 
-      <footer className="news-footer">
+      {!showLogin && <footer className="news-footer">
         <div className="news-footer__inner">
           <div><strong>Portal Warga Kampung Sapen</strong><p>Demangan, Kemantren Gondokusuman, Kota Yogyakarta</p></div>
           <div className="news-footer__links">
@@ -212,7 +212,7 @@ export default function PortalKampungSapen() {
             {!adminUser && <button type="button" onClick={() => { setLoginError(""); setShowLogin(true); }}><LogIn size={14} aria-hidden="true" /> Login Admin</button>}
           </div>
         </div>
-      </footer>
+      </footer>}
 
       {showLogin && (
         <div className="news-login-overlay" onMouseDown={(event) => { if (event.target === event.currentTarget) setShowLogin(false); }}>
