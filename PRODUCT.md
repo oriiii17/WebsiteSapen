@@ -8,45 +8,43 @@ web
 
 ## Users
 
-- Primary: residents of Kampung Sapen, Demangan, Gondokusuman, Yogyakarta, across age groups. They use the site, often on a phone, to check neighborhood news, ronda/siskamling schedules, the waste bank, and community finances.
-- Secondary: RW administrators, who use the administrator mode to update neighborhood news and information.
+- Primary: residents of Kampung Sapen, Demangan, Gondokusuman, Yogyakarta, across age groups, who visit on phones to read and search community news and announcements.
+- Secondary: administrators who sign in to publish and manage news through the CMS.
 
 ## Product Purpose
 
-The site is Kampung Sapen's digital information and services hub. It should make community information easy to find and read on a phone, including for older residents, and help residents stay informed and connected.
+The site is the public news portal for Kampung Sapen. Success means residents can quickly find, read, and search current local news and announcements, while administrators can publish updates reliably.
 
 ## Positioning
 
-A neighborhood portal for Kampung Sapen that brings local news and practical community services together in one accessible place.
+A focused Kampung Sapen publication for community news, notices, and schedules, presented in one searchable archive.
 
 ## Operating Context
 
-Residents primarily access the portal on mobile phones. RW administrators sign in to administrator mode and use its control bar to manage information.
+Residents mainly arrive from mobile phones to read. Administrators sign in to the protected CMS and create, edit, or remove articles.
 
 ## Capabilities and Constraints
 
-- Keep the experience in Bahasa Indonesia and prioritize mobile-first layouts, high contrast, and large tap targets.
-- Preserve the administrator login and control-bar flow, the news CMS CRUD workflow, and all existing API routes, including `/api/berita`, `/api/upload`, `/api/verify-token`, and `/api/modul-content`.
-- Preserve the existing token-gated module access as part of the system; it is not the homepage's primary focus.
-- Preserve the satellite map and the canvas game “Panen Berkah Sapen”.
-- Preserve the localStorage keys `sapen_admin_data`, `sapen_village_info_clean`, and `sapen_game_hi`.
-- Use lucide-react icons in place of emoji icons.
-- Stack is Next.js 14 App Router, React, TypeScript, and Tailwind CSS, as recorded in the project README and package manifest.
+- Interface language is Bahasa Indonesia. Prioritize mobile readability, high contrast, visible keyboard focus, and touch targets of at least 44px.
+- Homepage supports category filtering, news search, one featured story, and incremental loading of ten stories.
+- News content, including announcements and schedules, is stored as articles. Add the `Pengumuman` category using the existing `berita.category` field; do not change the database schema.
+- Preserve administrator login and CMS CRUD, existing API routes, environment-based Supabase configuration, the existing `berita` schema, and token-gated API capabilities.
+- Remove homepage game, finance and service dashboards, village info editor/local data, ticker, hero slider, maps embed, and the `/agenda`, `/peta`, and `/berita` listing pages (those routes redirect to `/`).
+- Stack is Next.js 14 App Router, React, TypeScript, and Tailwind CSS.
 
 ## Brand Commitments
 
-The product name is Kampung Sapen. The user describes the desired product experience as warm and characteristic of Yogyakarta. Keep the interface language in Bahasa Indonesia.
+The product name is Portal Warga Kampung Sapen. Use clear, factual Bahasa Indonesia and identify the whole Kampung Sapen community rather than a single RW.
 
 ## Evidence on Hand
 
-- Existing application source in `src/app`, `src/components`, and `src/data`.
-- Neighborhood imagery in `public/sapen.jpg` and `public/re9.jpg`.
-- Existing news content and fallback records in `src/data/beritaData.ts` and the homepage implementation.
-- Preserve real product data and functionality; do not invent community announcements, financial figures, schedules, or testimonials.
+- Existing application and CMS source in `src/app`.
+- Community imagery in `public/sapen.jpg` and `public/re9.jpg`.
+- Existing news records and fallback content in `src/data/beritaData.ts`; do not fabricate announcements, dates, contacts, or community claims.
 
 ## Product Principles
 
-- Make essential neighborhood information quick to find on a phone.
-- Keep information readable and usable for residents across ages.
-- Support administrators in maintaining timely, useful community updates.
-- Preserve existing services and integrations as the portal evolves.
+- Let residents arrive, read, and search without competing actions.
+- Put current community information ahead of interface decoration.
+- Keep article text readable for residents across ages and devices.
+- Make publishing reliable for administrators while keeping private operations server-side.

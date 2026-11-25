@@ -13,8 +13,8 @@ const atkinson = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Portal Warga Kampung Sapen Mandiri",
-  description: "Aktivitas dan Modul Resmi Warga Kampung Sapen",
+  title: "Warta Sapen — Berita Kampung Sapen",
+  description: "Berita, pengumuman, dan kabar warga Kampung Sapen, Yogyakarta.",
 };
 
 export default function RootLayout({

@@ -1,191 +1,163 @@
 ---
-name: Gardu Warga — Kampung Sapen
-description: Portal warga yang hangat dan mudah dibaca, berpusat pada kabar serta layanan kampung.
+name: Warta Pemerintah Modern — Kampung Sapen
+description: Portal berita warga yang ringkas, jelas, dan mudah dicari.
 colors:
-  ink: "#38271f"
-  ink-soft: "#66594d"
-  paper: "#faf3e6"
-  paper-raised: "#fffaf1"
-  rule: "#d8c9b3"
-  clay: "#a8452c"
-  clay-deep: "#71331f"
-  leaf: "#3d6544"
-  gold: "#bd792d"
-  warm-wash: "#f4e8d5"
-  success-wash: "#edf1e8"
-  focus: "#8b492b"
-  selection: "#d8ae78"
+  navy: "#17345f"
+  royal-blue: "#2458a6"
+  deep-blue: "#1a427e"
+  ink: "#172335"
+  muted-ink: "#48586c"
+  rule: "#d7dee8"
+  white: "#ffffff"
+  cool-wash: "#f3f6fa"
+  blue-wash: "#edf3fb"
+  focus: "#1d4ed8"
 typography:
   display:
-    fontFamily: 'Georgia, "Times New Roman", serif'
-    fontSize: "clamp(32px, 6vw, 52px)"
-    fontWeight: 700
-    lineHeight: 1.08
-    letterSpacing: "-0.025em"
-  headline:
-    fontFamily: 'Georgia, "Times New Roman", serif'
-    fontSize: "clamp(23px, 3.5vw, 30px)"
-    fontWeight: 700
+    fontFamily: "Atkinson Hyperlegible, Arial, sans-serif"
+    fontSize: "clamp(1.55rem, 3vw, 2.35rem)"
+    fontWeight: 800
     lineHeight: 1.2
-  title:
-    fontFamily: 'Trebuchet MS, "Segoe UI", sans-serif'
-    fontSize: "18px"
-    fontWeight: 800
+    letterSpacing: "-0.02em"
   body:
-    fontFamily: 'Trebuchet MS, "Segoe UI", sans-serif'
-    fontSize: "15px"
+    fontFamily: "Atkinson Hyperlegible, Arial, sans-serif"
+    fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.55
-  label:
-    fontFamily: 'Trebuchet MS, "Segoe UI", sans-serif'
-    fontSize: "12px"
-    fontWeight: 800
+    lineHeight: 1.5
 rounded:
-  xs: "4px"
-  sm: "5px"
-  md: "6px"
-  control: "7px"
-  card: "8px"
-  panel: "10px"
-  modal: "12px"
+  control: "5px"
+  surface: "7px"
 spacing:
-  xs: "4px"
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  xl: "20px"
-  section: "28px"
+  compact: "8px"
+  standard: "16px"
+  section: "32px"
 components:
   button-primary:
-    backgroundColor: "{colors.clay}"
-    textColor: "{colors.paper-raised}"
+    backgroundColor: "{colors.royal-blue}"
+    textColor: "{colors.white}"
     rounded: "{rounded.control}"
-    padding: "10px 15px"
     height: "46px"
-  button-primary-hover:
-    backgroundColor: "#873923"
-  card-content:
-    backgroundColor: "{colors.paper-raised}"
+  search-input:
+    backgroundColor: "{colors.white}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.panel}"
-    padding: "clamp(18px, 3vw, 28px)"
-  input:
-    backgroundColor: "#fffdf8"
+    rounded: "{rounded.control}"
+    height: "46px"
+  featured-story:
+    backgroundColor: "{colors.cool-wash}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.sm}"
-    padding: "11px 12px"
-    height: "48px"
+    rounded: "{rounded.surface}"
+    padding: "clamp(15px, 4vw, 38px)"
 ---
 
-# Design System: Gardu Warga — Kampung Sapen
+# Design System: Warta Pemerintah Modern — Kampung Sapen
 
 ## Overview
 
-**Creative North Star: “Gardu Warga”**
+**Creative North Star: “Warta Pemerintah Modern”**
 
-This system treats the homepage like a neighborhood guard post handover board: residents should quickly recognize the RW, read the current notice and ronda details, then move into news or services. Warm roster-paper cream, dark brown ink, terracotta, and leaf green give practical information a familiar local character.
+The portal is a concise public information desk for Kampung Sapen. Its interface puts the publication name, search, category filters, and current story in a predictable reading order. White space, navy headings, and royal-blue controls create institutional clarity while Atkinson Hyperlegible keeps the Indonesian copy easy to distinguish.
 
-The interface is mobile-first and supports residents across age groups. Clear sans-serif interface text, prominent serif headings, strong dividers, readable status labels, and generous touch targets carry the visual hierarchy. Surfaces remain simple and functional, without decorative texture.
+The visual voice is factual and restrained. Story imagery supplies the human warmth; the interface stays quiet so residents can read and search without competing service dashboards, promotional calls to action, or decorative motion.
 
 **Key Characteristics:**
-- Warm paper surfaces with dark, high-contrast text.
-- Terracotta for primary actions; green for civic and positive status.
-- Strong rules and compact labels organize information.
-- Large, legible type and controls sized for touch.
+- White and cool-gray reading surfaces with navy structure and royal-blue actions.
+- Compact, familiar public-information layout.
+- Atkinson Hyperlegible across interface and article text.
+- Thin rules and restrained corners instead of stacked decorative cards.
 
 ## Colors
 
-The palette pairs parchment cream and brown ink with restrained clay, leaf, and gold accents; status meaning is also stated in text and icons.
+Navy carries institutional hierarchy; royal blue makes navigation and actions easy to identify against crisp white surfaces.
 
 ### Primary
-- **Sapen Clay** (`#a8452c`): Primary buttons, active states, section accents, and article links.
-- **Deep Clay** (`#71331f`): Hover and pressed emphasis for clay actions.
-
-### Secondary
-- **Leaf Green** (`#3d6544`): Community ticker and positive or civic status indicators.
-- **Roster Gold** (`#bd792d`): Small supporting accent and warm details.
+- **Civic Navy** (`#17345f`): Brand mark, section rules, and primary hierarchy.
+- **Notice Blue** (`#2458a6`): Search icon, selected category, and reader actions.
+- **Deep Notice Blue** (`#1a427e`): Link text and hover state for sufficient contrast.
 
 ### Neutral
-- **Dark Ink** (`#38271f`): Main text and dark header/footer bands.
-- **Soft Ink** (`#66594d`): Supporting copy on light backgrounds.
-- **Roster Paper** (`#faf3e6`): Main page background.
-- **Raised Paper** (`#fffaf1`): Cards, controls, and raised content.
-- **Warm Wash** (`#f4e8d5`): Secondary panels and selected warm surfaces.
-- **Rule** (`#d8c9b3`): Borders and dividers.
-- **Success Wash** (`#edf1e8`): Positive service status background.
+- **Reading Ink** (`#172335`): Headings and primary copy.
+- **Slate Copy** (`#48586c`): Supporting text and dates.
+- **Cool Rule** (`#d7dee8`): Section and row dividers.
+- **White** (`#ffffff`): Main page and reading surfaces.
+- **News Wash** (`#f3f6fa`): Featured story surface.
+- **Blue Wash** (`#edf3fb`): Admin session bar and selected support states.
 
 ### Named Rules
-**The Status-in-Words Rule.** Pair color-coded statuses with readable text and, where present, an icon.
+**The Quiet Interface Rule.** Use color to identify hierarchy, links, selection, and focus; do not turn every section into a colored block.
 
 ## Typography
 
-**Display Font:** Georgia (with Times New Roman, serif fallback)  
-**Body Font:** Trebuchet MS (with Segoe UI, sans-serif fallback)
+**Display Font:** Atkinson Hyperlegible (with Arial and sans-serif fallbacks)  
+**Body Font:** Atkinson Hyperlegible (with Arial and sans-serif fallbacks)
 
-**Character:** A familiar editorial serif gives headlines neighborhood noticeboard character; a sturdy humanist system sans keeps controls, labels, and body copy practical and readable.
+**Character:** A single accessible sans-serif voice keeps scanning and long-form reading consistent. Weight and scale distinguish headlines from metadata without introducing a second decorative voice.
 
 ### Hierarchy
-- **Display** (700, `clamp(32px, 6vw, 52px)`, 1.08): Homepage hero heading.
-- **Headline** (700, `clamp(23px, 3.5vw, 30px)`, 1.2): Main content section headings.
-- **Title** (800, 18px): Brand title and service headings.
-- **Body** (400, 15px, 1.55): Default reading text; article copy is spaced more openly.
-- **Label** (800, 12px): Status, category, and compact interface labels.
+- **Display** (800, `clamp(1.55rem, 3vw, 2.35rem)`, 1.2): Featured story title.
+- **Headline** (800, `clamp(2rem, 5vw, 3.15rem)`, 1.17): Article title.
+- **Title** (800, 1.15rem, 1.35): Compact news-list title.
+- **Body** (400, 1rem to 1.12rem, 1.5 to 1.85): Interface and article text; article copy stays near 70ch.
+- **Label** (700–800, `.78rem` to `.92rem`, normal tracking): Category, date, and metadata.
+
+### Named Rules
+**The One Voice Rule.** Use the locally bundled Atkinson Hyperlegible face throughout public reading surfaces.
 
 ## Layout
 
-Start with a single-column mobile reading flow. The homepage content container reaches 1224px; hero and floating service shortcuts use a 1160px maximum. The article uses a 1160px outer container and a restrained reading column. Content panels use responsive padding, generally `clamp(18px, 3vw, 28px)`, with full-width rules that make sections easy to scan.
+The homepage uses a centered 1000px news column and a wider 1120px masthead. At mobile widths the masthead stacks a compact wordmark and full-width search field; category chips scroll horizontally; the featured story becomes a vertical image-and-title unit. The 360px viewport shows the masthead, search, categories, and the start of the featured story without a promotional hero.
 
-On wider screens, the four service shortcuts form a four-column grid, news and map areas use two-column layouts, and the article pairs its story with related content. At 760px and below, homepage grids and article layouts stack; at 420px and below, the homepage shortcuts collapse further. News administration stacks its form fields and list actions at 700px and below. Common controls have a 44px minimum touch height; form controls are 48px.
+News rows use a small left thumbnail and a right text column. Titles clamp to three lines and category/date metadata remains on one line. The article reading column is capped at 760px, with related stories beneath the article. Common controls remain at least 44px high.
 
 ## Elevation & Depth
 
-The system is flat by default: borders, paper-tone shifts, and dark header bands establish grouping. Homepage cards explicitly have no shadow. The centered modal is the notable lifted surface, using `0 18px 48px rgba(37, 26, 19, .28)` over a dark overlay. Focus uses a visible 3px outline rather than elevation.
+The system is flat by default. Dividers and a cool surface tint establish grouping; the featured story has a light border. A restrained shadow separates the login dialog from its overlay and appears subtly on the featured story hover state.
+
+**The Flat-by-Default Rule.** Reserve shadows for interaction or a modal that must sit above page content.
 
 ## Shapes
 
-Use modest rounded rectangles rather than pills: controls commonly use 5–7px radii, cards 8px, main panels 10px, and modal surfaces 12px. Borders are part of the information structure, usually 1px warm rules; prominent header bands have a 3px clay edge. Circular marks are reserved for the small neighborhood emblem and modal icon.
+Use crisp rectangular surfaces with small 4–7px corners. Search and category controls have modest rounding; featured stories and login dialogs use a 7–8px radius. Full-width rules organize long lists. Avoid pill-shaped cards and ornamental geometry.
 
 ## Components
 
 ### Buttons
-- **Shape:** Compact rounded rectangle, usually 5–7px.
-- **Primary:** Clay fill (`#a8452c`), raised-paper text, 10px 15px padding, and 46px minimum height.
-- **Hover / Focus:** Darken to `#873923`; keyboard focus receives a 3px visible outline with 3px offset.
-- **Secondary:** Raised paper or warm wash with an ink label and a fine brown border.
+- **Shape:** Compact rectangle, 5px radius.
+- **Primary:** Royal-blue fill, white label, 46px height.
+- **Hover / Focus:** Deep-blue hover; a 3px visible blue focus outline with offset.
+- **Secondary / Ghost:** Transparent or white background with navy/blue text; keep touch targets at least 44px high.
 
 ### Chips
-- **Style:** Small warm-tinted label with a fine gold or brown border, 4px radius, and bold 11–12px text.
-- **State:** Active tabs use clay fill and raised-paper text; status labels preserve explicit wording.
+- **Style:** Horizontal category labels on white, compact 5px corners.
+- **State:** Selected chip uses Civic Navy and white text; inactive chips use dark text and a light blue hover wash. The row can scroll on narrow screens.
 
 ### Cards / Containers
-- **Corner Style:** 8px for service and news cards; 10px for larger content panels.
-- **Background:** Raised paper, with warm wash for secondary groupings.
-- **Shadow Strategy:** Flat at rest; see Elevation & Depth for the modal exception.
-- **Border:** 1px roster rule.
-- **Internal Padding:** 15–22px for compact cards; responsive 18–28px for main panels.
+- **Corner Style:** 4–7px.
+- **Background:** White for lists and article content; News Wash for the featured story.
+- **Shadow Strategy:** Flat, with a fine border; subtle hover shadow only on the featured story.
+- **Border:** Cool Rule (`#d7dee8`).
+- **Internal Padding:** 15–38px on the featured story; news rows are separated by rules rather than nested cards.
 
 ### Inputs / Fields
-- **Style:** Warm white (`#fffdf8`), 1px brown stroke, 5px radius, 48px minimum height, and 11px 12px padding.
-- **Focus:** Clay border with a 3px warm focus outline and 1px offset.
-- **Error / Disabled:** Use explicit error copy and differentiated status colors; disabled submit controls lower opacity and show a wait cursor.
+- **Style:** White field, 1px cool border, 5px radius, 46px height.
+- **Focus:** Royal-blue border and a pale-blue focus halo.
+- **Error / Disabled:** Use direct Indonesian copy and a clear red error label; disabled submit controls retain readable contrast.
 
 ### Navigation
-The sticky paper navigation uses a bottom rule, simple sans labels, and 44px minimum link height. Hover adds a warm wash and clay text. The primary administrator entry is a clay button; mobile navigation adapts to a compact stacked layout.
+The public masthead combines a compact Sapen mark and a single news search. Category chips sit below it. The administrator entry stays small in the footer; a narrow admin bar appears only for a validated session.
 
-### Ronda Handover and Service Status
-The hero status and roster statistics foreground the ronda team and time. Use tabular numerals for schedule counts; keep status text visible alongside green or clay cues. The four service shortcuts remain distinct, generously padded targets.
+### Featured Story and News Row
+The featured story uses one image and a prominent title with category/date metadata. Secondary stories use a thumbnail at left, a title limited to three lines, and category/date metadata on one line, with no excerpt.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** use Bahasa Indonesia and keep essential neighborhood information quick to find on a phone.
-- **Do** pair status color with a text label and supporting icon where available.
-- **Do** use the paper, ink, clay, and leaf palette and the established serif/sans pairing.
-- **Do** preserve large controls, visible keyboard focus, and responsive single-column reading.
-- **Do** keep card depth flat and use borders and tonal paper shifts to group information.
+- **Do** keep search and current news at the top of the first mobile viewport.
+- **Do** preserve clear contrast, visible keyboard focus, and readable category/date metadata.
+- **Do** use white, cool gray, navy, and royal blue as the system palette.
+- **Do** let story imagery provide personality while the interface stays quiet.
 
 ### Don't:
-- **Don't** introduce decorative paper textures; the selected direction uses plain paper-toned surfaces.
-- **Don't** rely on color alone to explain a status.
-- **Don't** replace the clear information hierarchy with an undifferentiated run of cards.
-- **Don't** reduce mobile tap targets below the established 44px minimum for common controls.
+- **Don't** add dashboard metrics, service panels, a game, ticker, slider, map embed, or oversized calls to action to the public homepage.
+- **Don't** add financial balance widgets or the village information editor to the reading flow.
+- **Don't** add excerpts to compact news-list rows.
+- **Don't** use decorative gradients, emoji, or motion that competes with reading.

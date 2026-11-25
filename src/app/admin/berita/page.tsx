@@ -21,7 +21,6 @@ import {
   ListFilter,
   Building2
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 
 interface BeritaItem {
   id: number;
@@ -111,13 +110,10 @@ export default function AdminBeritaPastiGantiFoto() {
   const fetchBerita = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("berita")
-        .select("*")
-        .order("id", { ascending: false });
-
-      if (error) throw error;
-      setBeritaList(data || []);
+      const response = await fetch("/api/berita", { cache: "no-store" });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || "Gagal memuat berita.");
+      setBeritaList(result.data || []);
     } catch (e: any) {
       console.error("Gagal mengambil data:", e.message);
     } finally {
@@ -189,20 +185,22 @@ export default function AdminBeritaPastiGantiFoto() {
 
       if (isEditing && editId) {
         // Update baris di database Supabase
-        const { error: updateError } = await supabase
-          .from("berita")
-          .update({
+        const response = await fetch("/api/berita", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: editId,
             title,
             category,
-        author: author || "Admin Kampung Sapen",
+            author: author || "Admin Kampung Sapen",
             image: finalPhotoData, // Foto baru yang sudah dikompresi
             caption: caption || "Dokumentasi kegiatan Kampung Sapen.",
             excerpt,
             content: paragrafArray,
-          })
-          .eq("id", editId);
-
-        if (updateError) throw new Error("Gagal update database: " + updateError.message);
+          }),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || "Gagal memperbarui berita.");
 
         // Langsung ubah tampilan lokal seketika
         setBeritaList((prev) =>
@@ -212,13 +210,13 @@ export default function AdminBeritaPastiGantiFoto() {
         setNotification({ text: "✓ Foto thumbnail & berita berhasil diperbarui 100%!" });
       } else {
         // Buat Berita Baru
-        const { error: insertError } = await supabase
-          .from("berita")
-          .insert([
-            {
+        const response = await fetch("/api/berita", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
               title,
               category,
-        author: author || "Admin Kampung Sapen",
+              author: author || "Admin Kampung Sapen",
               image: finalPhotoData,
               caption: caption || "Dokumentasi kegiatan Kampung Sapen.",
               excerpt,
@@ -226,10 +224,10 @@ export default function AdminBeritaPastiGantiFoto() {
               views: 1,
               read_time: "2 min",
               date: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }),
-            }
-          ]);
-
-        if (insertError) throw new Error("Gagal menyimpan ke database: " + insertError.message);
+          }),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || "Gagal menyimpan berita.");
         setNotification({ text: "✓ Berita baru & foto berhasil tersimpan di database!" });
       }
 
@@ -247,12 +245,9 @@ export default function AdminBeritaPastiGantiFoto() {
   const handleDelete = async (id: number) => {
     if (!confirm("Apakah Anda yakin ingin menghapus berita ini dari database?")) return;
     try {
-      const { error } = await supabase
-        .from("berita")
-        .delete()
-        .eq("id", id);
-
-      if (error) throw error;
+      const response = await fetch(`/api/berita?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || "Gagal menghapus berita.");
       setBeritaList((prev) => prev.filter((b) => b.id !== id));
       setNotification({ text: "Berita berhasil dihapus dari database." });
     } catch (e: any) {
@@ -391,6 +386,7 @@ export default function AdminBeritaPastiGantiFoto() {
                     >
                       <option value="Berita Utama">Berita Utama</option>
                       <option value="Berita Warga">Berita Warga</option>
+                      <option value="Pengumuman">Pengumuman</option>
                       <option value="Siskamling & Ronda">Siskamling & Ronda</option>
                       <option value="Kegiatan Sosial">Kegiatan Sosial</option>
                       <option value="Kas & Pembangunan">Kas & Pembangunan</option>

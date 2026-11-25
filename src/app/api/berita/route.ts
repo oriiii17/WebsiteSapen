@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getSupabase, getSupabaseAdmin } from "@/lib/supabase";
+import { hasAdminRequest } from "@/lib/admin-auth";
 import { INITIAL_BERITA } from "@/data/beritaData";
 
 // 1. WAJIB HURUF BESAR: GET (Untuk mengambil daftar berita)
 export async function GET() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from("berita")
       .select("*")
       .order("id", { ascending: false });
@@ -24,6 +25,7 @@ export async function GET() {
 // 2. WAJIB HURUF BESAR: POST (Untuk menyimpan berita baru ke Supabase)
 export async function POST(req: Request) {
   try {
+    if (!hasAdminRequest(req)) return NextResponse.json({ success: false, message: "Akses admin diperlukan." }, { status: 401 });
     const body = await req.json();
 
     if (!body.title || !body.excerpt) {
@@ -37,7 +39,7 @@ export async function POST(req: Request) {
       ? body.content
       : (body.content || "").split("\n\n").filter(Boolean);
 
-    const { data, error } = await supabase
+    const { data, error } = await getSupabaseAdmin()
       .from("berita")
       .insert([
         {
@@ -45,9 +47,10 @@ export async function POST(req: Request) {
           excerpt: body.excerpt,
           content: contentArray,
           category: body.category || "Berita Warga",
-          author: body.author || "Pengurus RW 05",
-          read_time: body.readTime || "2 min",
-          image: body.image,
+          author: body.author || "Admin Kampung Sapen",
+          read_time: body.read_time || body.readTime || "2 min",
+          date: body.date || new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }),
+          image: body.image || "",
           caption: body.caption || "Dokumentasi kegiatan Kampung Sapen Yogyakarta.",
           views: 1,
         },
@@ -69,5 +72,44 @@ export async function POST(req: Request) {
       { success: false, message: err?.message || "Terjadi kesalahan server." },
       { status: 500 }
     );
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    if (!hasAdminRequest(req)) return NextResponse.json({ success: false, message: "Akses admin diperlukan." }, { status: 401 });
+    const body = await req.json();
+    const id = Number(body.id);
+    if (!Number.isInteger(id) || id < 1 || !body.title || !body.excerpt) {
+      return NextResponse.json({ success: false, message: "Data berita tidak lengkap." }, { status: 400 });
+    }
+    const content = Array.isArray(body.content) ? body.content : String(body.content || "").split("\n\n").filter(Boolean);
+    const { data, error } = await getSupabaseAdmin().from("berita").update({
+      title: body.title,
+      excerpt: body.excerpt,
+      content,
+      category: body.category || "Berita Warga",
+      author: body.author || "Admin Kampung Sapen",
+      read_time: body.read_time || body.readTime || "2 min",
+      image: body.image || "",
+      caption: body.caption || "Dokumentasi kegiatan Kampung Sapen Yogyakarta.",
+    }).eq("id", id).select().single();
+    if (error) return NextResponse.json({ success: false, message: "Gagal memperbarui berita." }, { status: 500 });
+    return NextResponse.json({ success: true, data });
+  } catch {
+    return NextResponse.json({ success: false, message: "Terjadi kesalahan server." }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    if (!hasAdminRequest(req)) return NextResponse.json({ success: false, message: "Akses admin diperlukan." }, { status: 401 });
+    const id = Number(new URL(req.url).searchParams.get("id"));
+    if (!Number.isInteger(id) || id < 1) return NextResponse.json({ success: false, message: "ID berita tidak valid." }, { status: 400 });
+    const { error } = await getSupabaseAdmin().from("berita").delete().eq("id", id);
+    if (error) return NextResponse.json({ success: false, message: "Gagal menghapus berita." }, { status: 500 });
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json({ success: false, message: "Terjadi kesalahan server." }, { status: 500 });
   }
 }

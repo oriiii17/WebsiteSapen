@@ -1,44 +1,37 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-
-const ADMIN_ACCOUNTS: Record<string, { pin: string; role: string; nama: string }> = {
-  "admin": { pin: "sapen2026", role: "SUPER_ADMIN", nama: "Admin Pengelola Web" },
-  "pengurus": { pin: "wargasapen", role: "PENGURUS_RW", nama: "Pengurus RW 05 Sapen" }
-};
+import { createAdminSession, ADMIN_COOKIE } from "@/lib/admin-auth";
 
 export async function POST(req: Request) {
   try {
-    const { username, pin } = await req.json();
-    const user = ADMIN_ACCOUNTS[username?.trim().toLowerCase()];
-
-    if (!user || user.pin !== pin?.trim()) {
-      return NextResponse.json(
-        { success: false, message: "Username atau PIN Pengurus salah!" },
-        { status: 401 }
-      );
+    const configuredUsername = process.env.ADMIN_USERNAME;
+    const configuredPassword = process.env.ADMIN_PASSWORD;
+    if (!configuredUsername || !configuredPassword) {
+      return NextResponse.json({ success: false, message: "Login admin belum dikonfigurasi di server." }, { status: 503 });
     }
 
-    const sessionData = {
-      isAdmin: true,
-      role: user.role,
-      nama: user.nama,
-      username: username.toLowerCase()
-    };
+    const body = await req.json();
+    const username = typeof body.username === "string" ? body.username.trim() : "";
+    const password = typeof body.password === "string" ? body.password : typeof body.pin === "string" ? body.pin : "";
+    if (username.toLowerCase() !== configuredUsername.trim().toLowerCase() || password !== configuredPassword) {
+      return NextResponse.json({ success: false, message: "Username atau PIN Admin salah!" }, { status: 401 });
+    }
 
-    const cookieStore = cookies();
-    cookieStore.set("sapen_admin_auth", JSON.stringify(sessionData), {
-      httpOnly: false,
-      maxAge: 60 * 60 * 24 * 14,
-      path: "/",
-      sameSite: "lax",
-    });
-
-    return NextResponse.json({
+    const nama = "Admin Kampung Sapen";
+    const { token, session, maxAge } = createAdminSession(configuredUsername.trim(), nama);
+    const response = NextResponse.json({
       success: true,
-      message: `Login Berhasil! Selamat bertugas, ${user.nama}.`,
-      data: sessionData
+      message: `Login Berhasil! Selamat bertugas, ${nama}.`,
+      data: { isAdmin: true, username: session.username, nama, role: "ADMIN" },
     });
-  } catch (e) {
+    response.cookies.set(ADMIN_COOKIE, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge,
+      path: "/",
+    });
+    return response;
+  } catch {
     return NextResponse.json({ success: false, message: "Terjadi kesalahan server." }, { status: 500 });
   }
 }

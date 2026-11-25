@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
+import { hasAdminRequest } from "@/lib/admin-auth";
 
 export async function POST(req: Request) {
   try {
+    if (!hasAdminRequest(req)) {
+      return NextResponse.json({ success: false, message: "Akses admin diperlukan." }, { status: 401 });
+    }
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
@@ -22,7 +26,8 @@ export async function POST(req: Request) {
     const buffer = Buffer.from(bytes);
 
     // Upload langsung ke Supabase Storage Bucket 'sapen-assets'
-    const { data, error } = await supabase.storage
+    const supabaseAdmin = getSupabaseAdmin();
+    const { data, error } = await supabaseAdmin.storage
       .from("sapen-assets")
       .upload(cleanFileName, buffer, {
         contentType: file.type || "image/jpeg",
@@ -38,7 +43,7 @@ export async function POST(req: Request) {
     }
 
     // Ambil Link URL Publik foto yang baru di-upload
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = supabaseAdmin.storage
       .from("sapen-assets")
       .getPublicUrl(cleanFileName);
 
