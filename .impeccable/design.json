@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-25T00:00:00+07:00",
+  "title": "Design System: Gardu Warga — Kampung Sapen",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "neutral", "displayName": "Dark Ink", "canonical": "#38271f" },
+      "ink-soft": { "role": "neutral", "displayName": "Soft Ink", "canonical": "#66594d" },
+      "paper": { "role": "neutral", "displayName": "Roster Paper", "canonical": "#faf3e6" },
+      "paper-raised": { "role": "neutral", "displayName": "Raised Paper", "canonical": "#fffaf1" },
+      "rule": { "role": "neutral", "displayName": "Warm Rule", "canonical": "#d8c9b3" },
+      "clay": { "role": "primary", "displayName": "Sapen Clay", "canonical": "#a8452c" },
+      "clay-deep": { "role": "primary", "displayName": "Deep Clay", "canonical": "#71331f" },
+      "leaf": { "role": "secondary", "displayName": "Leaf Green", "canonical": "#3d6544" },
+      "gold": { "role": "tertiary", "displayName": "Roster Gold", "canonical": "#bd792d" },
+      "warm-wash": { "role": "neutral", "displayName": "Warm Wash", "canonical": "#f4e8d5" },
+      "success-wash": { "role": "neutral", "displayName": "Success Wash", "canonical": "#edf1e8" },
+      "focus": { "role": "primary", "displayName": "Focus Clay", "canonical": "#8b492b" },
+      "selection": { "role": "tertiary", "displayName": "Selection Gold", "canonical": "#d8ae78" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Hero Serif", "purpose": "Homepage hero heading, set in Georgia with a Times New Roman fallback." },
+      "headline": { "displayName": "Section Serif", "purpose": "Main content headings, set in Georgia with a Times New Roman fallback." },
+      "title": { "displayName": "Interface Sans Title", "purpose": "Brand and service titles, set in Trebuchet MS with Segoe UI fallback." },
+      "body": { "displayName": "Interface Sans Body", "purpose": "Readable interface and article copy." },
+      "label": { "displayName": "Compact Sans Label", "purpose": "Bold category, status, and compact interface labels." }
+    },
+    "shadows": [
+      { "name": "modal-lift", "value": "0 18px 48px rgba(37, 26, 19, .28)", "purpose": "Lift the centered modal above the dark overlay; other homepage cards are flat." }
+    ],
+    "motion": [
+      { "name": "card-hover", "value": "background-color .18s ease-out, border-color .18s ease-out", "purpose": "Subtle hover response for service shortcut cards." },
+      { "name": "hero-fade", "value": "opacity .45s ease-out", "purpose": "Fade between low-opacity hero background images." },
+      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "Reduce transition and animation duration in portal and admin views." }
+    ],
+    "breakpoints": [
+      { "name": "compact-home-and-article", "value": "760px" },
+      { "name": "compact-admin", "value": "700px" },
+      { "name": "small-home", "value": "420px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The clay-filled action used for the primary portal or form action.",
+      "html": "<button class=\"ds-button-primary\">Masuk pengurus</button>",
+      "css": ".ds-button-primary { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 15px; border: 1px solid #7d3626; border-radius: 7px; background: #a8452c; color: #fffaf1; font: 800 13px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif; cursor: pointer; transition: background-color .18s ease-out; } .ds-button-primary:hover { background: #873923; } .ds-button-primary:focus-visible { outline: 3px solid #8b492b; outline-offset: 3px; } .ds-button-primary:active { background: #71331f; }"
+    },
+    {
+      "name": "Service Shortcut Card",
+      "kind": "card",
+      "refersTo": "card-content",
+      "description": "A generously sized home shortcut for Berita, Ronda, Bank Sampah, or Kas.",
+      "html": "<button class=\"ds-service-card\"><span class=\"ds-service-card__title\">Jadwal ronda</span><span class=\"ds-service-card__detail\">Lihat regu dan jam jaga</span></button>",
+      "css": ".ds-service-card { min-height: 104px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 15px; border: 1px solid #cbb99e; border-radius: 8px; background: #fffaf1; color: #38271f; font: inherit; text-align: left; cursor: pointer; transition: background-color .18s ease-out, border-color .18s ease-out; } .ds-service-card:hover { border-color: #a8452c; background: #f4e8d5; } .ds-service-card:focus-visible { outline: 3px solid #8b492b; outline-offset: 3px; } .ds-service-card__title { font: 800 14px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif; } .ds-service-card__detail { color: #66594d; font: 400 12px/1.5 'Trebuchet MS', 'Segoe UI', sans-serif; }"
+    },
+    {
+      "name": "Roster Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A labeled form field for resident or administrator information.",
+      "html": "<label class=\"ds-field-label\" for=\"ds-field\">Nama pengurus</label><input class=\"ds-field\" id=\"ds-field\" placeholder=\"Nama lengkap\" />",
+      "css": ".ds-field-label { display: block; margin-bottom: 7px; color: #44372d; font: 800 14px/1.4 'Trebuchet MS', 'Segoe UI', sans-serif; } .ds-field { width: 100%; min-height: 48px; padding: 11px 12px; border: 1px solid #8f7d67; border-radius: 5px; background: #fffdf8; color: #38271f; font: 400 15px/1.5 'Trebuchet MS', 'Segoe UI', sans-serif; } .ds-field::placeholder { color: #625447; opacity: 1; } .ds-field:focus-visible { border-color: #8f3c27; outline: 3px solid #d7aa81; outline-offset: 1px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Gardu Warga",
+    "overview": "This system treats the homepage like a neighborhood guard post handover board: residents should quickly recognize the RW, read the current notice and ronda details, then move into news or services. Warm roster-paper cream, dark brown ink, terracotta, and leaf green give practical information a familiar local character.\n\nThe interface is mobile-first and supports residents across age groups. Clear sans-serif interface text, prominent serif headings, strong dividers, readable status labels, and generous touch targets carry the visual hierarchy. Surfaces remain simple and functional, without decorative texture.",
+    "keyCharacteristics": [
+      "Warm paper surfaces with dark, high-contrast text.",
+      "Terracotta for primary actions; green for civic and positive status.",
+      "Strong rules and compact labels organize information.",
+      "Large, legible type and controls sized for touch."
+    ],
+    "rules": [
+      { "name": "The Status-in-Words Rule", "body": "Pair color-coded statuses with readable text and, where present, an icon.", "section": "colors" }
+    ],
+    "dos": [
+      "Do use Bahasa Indonesia and keep essential neighborhood information quick to find on a phone.",
+      "Do pair status color with a text label and supporting icon where available.",
+      "Do use the paper, ink, clay, and leaf palette and the established serif/sans pairing.",
+      "Do preserve large controls, visible keyboard focus, and responsive single-column reading.",
+      "Do keep card depth flat and use borders and tonal paper shifts to group information."
+    ],
+    "donts": [
+      "Don't introduce decorative paper textures; the selected direction uses plain paper-toned surfaces.",
+      "Don't rely on color alone to explain a status.",
+      "Don't replace the clear information hierarchy with an undifferentiated run of cards.",
+      "Don't reduce mobile tap targets below the established 44px minimum for common controls."
+    ]
+  }
+}
