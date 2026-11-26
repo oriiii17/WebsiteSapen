@@ -104,10 +104,13 @@ export async function PUT(req: Request) {
 export async function DELETE(req: Request) {
   try {
     if (!hasAdminRequest(req)) return NextResponse.json({ success: false, message: "Akses admin diperlukan." }, { status: 401 });
-    const id = Number(new URL(req.url).searchParams.get("id"));
-    if (!Number.isInteger(id) || id < 1) return NextResponse.json({ success: false, message: "ID berita tidak valid." }, { status: 400 });
+    const id = new URL(req.url).searchParams.get("id")?.trim();
+    if (!id) return NextResponse.json({ success: false, message: "ID berita tidak valid." }, { status: 400 });
     const { error } = await getSupabaseAdmin().from("berita").delete().eq("id", id);
-    if (error) return NextResponse.json({ success: false, message: "Gagal menghapus berita." }, { status: 500 });
+    if (error) {
+      console.error("Gagal menghapus berita di Supabase:", error.message);
+      return NextResponse.json({ success: false, message: "Gagal menghapus berita." }, { status: 500 });
+    }
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ success: false, message: "Terjadi kesalahan server." }, { status: 500 });

@@ -14,8 +14,19 @@ const atkinson = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Warta Sapen — Berita Kampung Sapen",
-  description: "Berita, pengumuman, dan kabar warga Kampung Sapen, Yogyakarta.",
+  metadataBase: new URL("https://www.sapen.my.id"),
+  title: "Kampung Sapen - Portal Resmi Informasi & Berita Warga",
+  description: "Portal resmi informasi, pengumuman warga, kegiatan RW 05, kepemudaan, dan berita terbaru Kampung Sapen, Yogyakarta.",
+  keywords: ["Kampung Sapen", "Kampung Sapen Yogyakarta", "Portal Warga Kampung Sapen", "Berita Kampung Sapen", "RW 05 Sapen"],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "https://www.sapen.my.id/",
+    siteName: "Kampung Sapen",
+    title: "Kampung Sapen - Portal Resmi Informasi & Berita Warga",
+    description: "Portal resmi informasi, pengumuman warga, kegiatan RW 05, kepemudaan, dan berita terbaru Kampung Sapen, Yogyakarta.",
+  },
 };
 
 export default function RootLayout({
