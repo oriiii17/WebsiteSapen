@@ -13,7 +13,7 @@ web
 
 ## Product Purpose
 
-The site is the public news portal for Kampung Sapen. Success means residents can quickly find, read, and search current local news and announcements, while administrators can publish updates reliably.
+Situs ini adalah portal informasi warga Kampung Sapen dalam bahasa Indonesia dan Inggris, dengan berita yang mudah dicari serta halaman khusus Wayang Uwuh untuk mengenalkan karya dan mengarahkan pengunjung ke Shopee atau WhatsApp.
 
 ## Positioning
 

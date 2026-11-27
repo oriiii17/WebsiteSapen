@@ -12,6 +12,7 @@ import {
 } from "react";
 import { AlertCircle, CheckCircle2, Info, X } from "lucide-react";
 import "./site-feedback.css";
+import { dictionaries, type Locale } from "@/lib/i18n";
 
 type ToastKind = "success" | "error" | "info";
 type ToastMessage = { id: number; message: string; kind: ToastKind };
@@ -29,7 +30,8 @@ export function useSiteFeedback() {
   return value;
 }
 
-export function SiteFeedbackProvider({ children }: { children: ReactNode }) {
+export function SiteFeedbackProvider({ children, locale = "id" }: { children: ReactNode; locale?: Locale }) {
+  const copy = dictionaries[locale];
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
@@ -79,14 +81,14 @@ export function SiteFeedbackProvider({ children }: { children: ReactNode }) {
   return (
     <FeedbackContext.Provider value={{ notify, askConfirmation }}>
       {children}
-      <div className="site-toasts" aria-label="Notifikasi" aria-live="off">
+      <div className="site-toasts" aria-label={copy.toastRegion} aria-live="off">
         {toasts.map((toast) => {
           const Icon = toast.kind === "error" ? AlertCircle : toast.kind === "success" ? CheckCircle2 : Info;
           return (
             <div key={toast.id} className={`site-toast site-toast--${toast.kind}`} role={toast.kind === "error" ? "alert" : "status"}>
               <Icon size={20} aria-hidden="true" />
               <p>{toast.message}</p>
-              <button type="button" aria-label="Tutup notifikasi" onClick={() => setToasts((current) => current.filter((item) => item.id !== toast.id))}><X size={18} aria-hidden="true" /></button>
+              <button type="button" aria-label={copy.closeToast} onClick={() => setToasts((current) => current.filter((item) => item.id !== toast.id))}><X size={18} aria-hidden="true" /></button>
             </div>
           );
         })}
@@ -97,7 +99,7 @@ export function SiteFeedbackProvider({ children }: { children: ReactNode }) {
             <h2 id="site-dialog-title">{confirmation.title}</h2>
             <p id="site-dialog-description">{confirmation.description}</p>
             <div className="site-dialog__actions">
-              <button ref={cancelButtonRef} type="button" className="site-dialog__cancel" onClick={() => closeConfirmation(false)}>Batal</button>
+              <button ref={cancelButtonRef} type="button" className="site-dialog__cancel" onClick={() => closeConfirmation(false)}>{copy.cancel}</button>
               <button type="button" className={`site-dialog__confirm${confirmation.danger ? " is-danger" : ""}`} onClick={() => closeConfirmation(true)}>{confirmation.confirmLabel}</button>
             </div>
           </div>

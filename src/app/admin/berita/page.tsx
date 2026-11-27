@@ -33,6 +33,10 @@ interface BeritaItem {
   image: string;
   caption: string;
   content: string[];
+  title_en?: string;
+  excerpt_en?: string;
+  content_en?: string[];
+  caption_en?: string;
 }
 
 const DEFAULT_FALLBACK_IMAGE = "https://images.unsplash.com/photo-1544027993-37dbfe43562a?q=80&w=1000&auto=format&fit=crop";
@@ -99,6 +103,11 @@ export default function AdminBeritaPastiGantiFoto() {
   const [caption, setCaption] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
+  const [activeLanguage, setActiveLanguage] = useState<"id" | "en">("id");
+  const [titleEn, setTitleEn] = useState("");
+  const [excerptEn, setExcerptEn] = useState("");
+  const [contentEn, setContentEn] = useState("");
+  const [captionEn, setCaptionEn] = useState("");
 
   // Foto State
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -134,6 +143,11 @@ export default function AdminBeritaPastiGantiFoto() {
     setCaption("");
     setExcerpt("");
     setContent("");
+    setActiveLanguage("id");
+    setTitleEn("");
+    setExcerptEn("");
+    setContentEn("");
+    setCaptionEn("");
     setSelectedFile(null);
     setImagePreview("");
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -158,6 +172,11 @@ export default function AdminBeritaPastiGantiFoto() {
     setCaption(item.caption || "");
     setExcerpt(item.excerpt || "");
     setContent(Array.isArray(item.content) ? item.content.join("\n\n") : (item.content || ""));
+    setTitleEn(item.title_en || "");
+    setExcerptEn(item.excerpt_en || "");
+    setContentEn(Array.isArray(item.content_en) ? item.content_en.join("\n\n") : "");
+    setCaptionEn(item.caption_en || "");
+    setActiveLanguage("id");
     setActiveTab("form");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -196,6 +215,10 @@ export default function AdminBeritaPastiGantiFoto() {
             caption: caption || "Dokumentasi kegiatan Kampung Sapen.",
             excerpt,
             content: paragrafArray,
+            title_en: titleEn,
+            excerpt_en: excerptEn,
+            content_en: contentEn.split("\n\n").filter(Boolean),
+            caption_en: captionEn,
           }),
         });
         const result = await response.json();
@@ -203,7 +226,7 @@ export default function AdminBeritaPastiGantiFoto() {
 
         // Langsung ubah tampilan lokal seketika
         setBeritaList((prev) =>
-          prev.map((b) => (b.id === editId ? { ...b, title, image: finalPhotoData, category, excerpt } : b))
+          prev.map((b) => (b.id === editId ? { ...b, title, image: finalPhotoData, category, excerpt, title_en: titleEn, excerpt_en: excerptEn, content_en: contentEn.split("\n\n").filter(Boolean), caption_en: captionEn } : b))
         );
 
         notify("Berita berhasil diperbarui.", "success");
@@ -220,6 +243,10 @@ export default function AdminBeritaPastiGantiFoto() {
               caption: caption || "Dokumentasi kegiatan Kampung Sapen.",
               excerpt,
               content: paragrafArray,
+              title_en: titleEn,
+              excerpt_en: excerptEn,
+              content_en: contentEn.split("\n\n").filter(Boolean),
+              caption_en: captionEn,
               views: 1,
               read_time: "2 min",
               date: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }),
@@ -335,6 +362,14 @@ export default function AdminBeritaPastiGantiFoto() {
             </div>
 
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+              <div className="admin-news-tabs admin-news-language-tabs" role="tablist" aria-label="Bahasa konten berita">
+                <button type="button" role="tab" aria-selected={activeLanguage === "id"} onClick={() => setActiveLanguage("id")} className={`admin-news-tab${activeLanguage === "id" ? " is-active" : ""}`}>
+                  <span>Indonesia · Wajib</span>
+                </button>
+                <button type="button" role="tab" aria-selected={activeLanguage === "en"} onClick={() => setActiveLanguage("en")} className={`admin-news-tab${activeLanguage === "en" ? " is-active" : ""}`}>
+                  <span>English · Opsional</span>
+                </button>
+              </div>
               
               {/* SEKSI 1: INFORMASI UTAMA */}
               <section className="admin-news-section">
@@ -345,15 +380,15 @@ export default function AdminBeritaPastiGantiFoto() {
 
                 <div style={{ marginBottom: "18px" }}>
                   <label style={{ display: "block", fontSize: "13.5px", fontWeight: 800, color: "#1e293b", marginBottom: "8px" }}>
-                    Judul Lengkap Berita *
+                      {activeLanguage === "id" ? "Judul Lengkap Berita *" : "Judul Berita (English, opsional)"}
                   </label>
                   <input
                     type="text"
-                    placeholder="Contoh: Kerja Bakti Saluran Air RT 01-03 Sapen..."
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder={activeLanguage === "id" ? "Contoh: Kerja Bakti Saluran Air RT 01-03 Sapen..." : "Example: Community Clean-up in Kampung Sapen..."}
+                    value={activeLanguage === "id" ? title : titleEn}
+                    onChange={(e) => activeLanguage === "id" ? setTitle(e.target.value) : setTitleEn(e.target.value)}
                     className="admin-news-field"
-                    required
+                    required={activeLanguage === "id"}
                   />
                 </div>
 
@@ -446,13 +481,13 @@ export default function AdminBeritaPastiGantiFoto() {
 
                 <div style={{ marginTop: "16px" }}>
                   <label style={{ display: "block", fontSize: "13px", fontWeight: 700, color: "#334155", marginBottom: "6px" }}>
-                    Keterangan Foto (Caption)
+                    {activeLanguage === "id" ? "Keterangan Foto (Caption)" : "Keterangan Foto (English, opsional)"}
                   </label>
                   <input
                     type="text"
-                    placeholder="Contoh: Dokumentasi kegiatan warga Kampung Sapen."
-                    value={caption}
-                    onChange={(e) => setCaption(e.target.value)}
+                    placeholder={activeLanguage === "id" ? "Contoh: Dokumentasi kegiatan warga Kampung Sapen." : "Example: Documentation of a community activity in Kampung Sapen."}
+                    value={activeLanguage === "id" ? caption : captionEn}
+                    onChange={(e) => activeLanguage === "id" ? setCaption(e.target.value) : setCaptionEn(e.target.value)}
                     className="admin-news-field"
                   />
                 </div>
@@ -467,29 +502,29 @@ export default function AdminBeritaPastiGantiFoto() {
 
                 <div style={{ marginBottom: "18px" }}>
                   <label style={{ display: "block", fontSize: "13.5px", fontWeight: 800, color: "#1e293b", marginBottom: "8px" }}>
-                    Ringkasan Singkat (Tampil di Halaman Depan) *
+                    {activeLanguage === "id" ? "Ringkasan Singkat (Tampil di Halaman Depan) *" : "Ringkasan Berita (English, opsional)"}
                   </label>
                   <textarea
                     rows={2}
-                    placeholder="Tulis 1-2 kalimat ringkasan pengantar..."
-                    value={excerpt}
-                    onChange={(e) => setExcerpt(e.target.value)}
+                    placeholder={activeLanguage === "id" ? "Tulis 1-2 kalimat ringkasan pengantar..." : "Write a short English summary..."}
+                    value={activeLanguage === "id" ? excerpt : excerptEn}
+                    onChange={(e) => activeLanguage === "id" ? setExcerpt(e.target.value) : setExcerptEn(e.target.value)}
                     className="admin-news-field admin-news-field--multiline"
-                    required
+                    required={activeLanguage === "id"}
                   />
                 </div>
 
                 <div>
                   <label style={{ display: "block", fontSize: "13.5px", fontWeight: 800, color: "#1e293b", marginBottom: "8px" }}>
-                    Isi Berita Lengkap * (Enter 2x untuk Paragraf Baru)
+                    {activeLanguage === "id" ? "Isi Berita Lengkap * (Enter 2x untuk Paragraf Baru)" : "Isi Berita Lengkap (English, opsional)"}
                   </label>
                   <textarea
                     rows={8}
-                    placeholder="Tulis seluruh naskah berita lengkap di sini..."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    placeholder={activeLanguage === "id" ? "Tulis seluruh naskah berita lengkap di sini..." : "Write the full article in English..."}
+                    value={activeLanguage === "id" ? content : contentEn}
+                    onChange={(e) => activeLanguage === "id" ? setContent(e.target.value) : setContentEn(e.target.value)}
                     className="admin-news-field admin-news-field--multiline"
-                    required
+                    required={activeLanguage === "id"}
                   />
                 </div>
               </section>
