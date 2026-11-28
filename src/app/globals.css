@@ -10,15 +10,15 @@ html {
 }
 
 :root {
-  --sapen-primary: #334437;
-  --sapen-primary-deep: #25362b;
-  --sapen-accent: #607362;
-  --sapen-accent-soft: #e8ede5;
-  --sapen-warm: #f8f8f2;
-  --sapen-neutral: #e5e8df;
-  --sapen-text: #202720;
-  --sapen-muted: #536055;
-  --sapen-border: #d7ddd3;
+  --sapen-primary: #354128;
+  --sapen-primary-deep: #252f1d;
+  --sapen-accent: #53603a;
+  --sapen-accent-soft: #edf0e5;
+  --sapen-warm: #f8f8f4;
+  --sapen-neutral: #e6e8dc;
+  --sapen-text: #20251c;
+  --sapen-muted: #4e5842;
+  --sapen-border: #d9ddce;
   --sapen-card: #fff;
 }
 
@@ -27,6 +27,8 @@ body {
   background-color: #f8fafc !important;
   color: #0f172a !important;
   font-family: var(--font-atkinson), Arial, sans-serif !important;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "zero" 0;
   min-height: 100dvh;
   margin: 0;
   padding: 0;

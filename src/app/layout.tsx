@@ -44,6 +44,10 @@ export async function generateMetadata({ params }: { params?: { lang?: string } 
       title: dictionary.title,
       description: dictionary.description,
     },
+    icons: {
+      icon: [{ url: "/images/sapen-favicon-v2.png", type: "image/png", sizes: "48x48" }],
+      apple: [{ url: "/images/sapen-apple-touch-v2.png", type: "image/png", sizes: "180x180" }],
+    },
   };
 }
 

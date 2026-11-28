@@ -6,7 +6,7 @@ import { flushSync } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { ArrowRight, Building2, ChevronLeft, ChevronRight, LogIn, LogOut, Mail, MapPin, Menu, Newspaper, Phone, RotateCcw, Search, X } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, LogIn, LogOut, Mail, MapPin, Menu, Newspaper, Phone, RotateCcw, Search, Sparkles, X } from "lucide-react";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { WaveDivider } from "@/components/wave-divider";
 import { ALL_CATEGORY, ANNOUNCEMENT_CATEGORY, categoryLabel, dictionaries, formatNewsDate, formatNumber, isLocale } from "@/lib/i18n";
@@ -49,8 +49,10 @@ export default function PortalKampungSapen() {
   const [page, setPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [heroIndex, setHeroIndex] = useState(0);
+  const [sliderRevision, setSliderRevision] = useState(0);
   const [sliderHovered, setSliderHovered] = useState(false);
   const [sliderFocused, setSliderFocused] = useState(false);
+  const touchStartXRef = useRef<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const [showLogin, setShowLogin] = useState(false);
@@ -116,7 +118,18 @@ export default function PortalKampungSapen() {
     if (sliderHovered || sliderFocused || heroStories.length < 2) return;
     const timer = window.setInterval(() => setHeroIndex((index) => (index + 1) % heroStories.length), 6000);
     return () => window.clearInterval(timer);
-  }, [heroStories.length, sliderHovered, sliderFocused]);
+  }, [heroStories.length, sliderHovered, sliderFocused, sliderRevision]);
+
+  const moveHero = (direction: -1 | 1) => {
+    if (heroStories.length < 2) return;
+    setHeroIndex((index) => (index + direction + heroStories.length) % heroStories.length);
+    setSliderRevision((revision) => revision + 1);
+  };
+
+  const selectHero = (index: number) => {
+    setHeroIndex(index);
+    setSliderRevision((revision) => revision + 1);
+  };
 
   const filteredNews = useMemo(() => {
     const localeTag = locale === "en" ? "en-US" : "id-ID";
@@ -236,7 +249,7 @@ export default function PortalKampungSapen() {
         <div className="news-topbar">
           <div className="news-header__inner">
             <Link className="news-brand" href={`/${locale}`} aria-label={`${t.footerIdentity}, ${t.home}`}>
-              <span className="news-brand__mark"><Building2 aria-hidden="true" size={23} /></span>
+              <Image className="news-brand__logo" src="/images/sapen-logo-2x.png" width={225} height={88} alt={t.logoAlt} priority />
               <span className="news-brand__copy"><strong>{t.brand}</strong><small>{t.brandSubtitle}</small></span>
             </Link>
             <label className="news-search news-search--header">
@@ -271,32 +284,32 @@ export default function PortalKampungSapen() {
         </div>
       )}
 
-      <section className="home-hero" aria-label={t.heroSliderLabel} aria-hidden={showLogin} onMouseEnter={() => setSliderHovered(true)} onMouseLeave={() => setSliderHovered(false)} onFocusCapture={() => setSliderFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setSliderFocused(false); }}>
+      <section className="home-hero" aria-label={t.heroSliderLabel} aria-hidden={showLogin} onMouseEnter={() => setSliderHovered(true)} onMouseLeave={() => setSliderHovered(false)} onFocusCapture={() => setSliderFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setSliderFocused(false); }} onTouchStart={(event) => { touchStartXRef.current = event.touches[0]?.clientX ?? null; }} onTouchEnd={(event) => { const start = touchStartXRef.current; const end = event.changedTouches[0]?.clientX; touchStartXRef.current = null; if (start !== null && end !== undefined && Math.abs(end - start) > 48) moveHero(end < start ? 1 : -1); }}>
         {heroStory ? (
           <>
-            <img className="home-hero__image" src={heroStory.image || DEFAULT_IMAGE} alt="" onError={(event) => { event.currentTarget.src = DEFAULT_IMAGE; }} />
+            <Image className="home-hero__image" src={heroStory.image || DEFAULT_IMAGE} alt="" fill priority sizes="100vw" quality={85} unoptimized onError={(event) => { event.currentTarget.src = DEFAULT_IMAGE; }} />
             <div className="home-hero__shade" />
             <div className="home-hero__content">
               <span className="home-hero__eyebrow">{t.homeHeroLabel}</span>
               <div className="home-hero__meta"><span>{categoryLabel(heroStory.category, locale, t)}</span><time>{formatNewsDate(heroStory.date, locale)}</time></div>
               <h1>{heroStory.title}<span className="sr-only"> — {t.homeHeading}</span></h1>
               <Link className="home-hero__cta" href={`/${locale}/berita/${heroStory.id}`}>
-                {t.readNews}<span><ArrowRight aria-hidden="true" size={18} /></span>
+                <strong>{t.homeReadMore}</strong><span><ArrowRight aria-hidden="true" size={18} /></span>
               </Link>
             </div>
             {heroStories.length > 1 && (
               <>
-                <button className="home-hero__arrow home-hero__arrow--prev" type="button" aria-label={t.homePreviousStory} onClick={() => setHeroIndex((index) => (index - 1 + heroStories.length) % heroStories.length)}><ChevronLeft aria-hidden="true" /></button>
-                <button className="home-hero__arrow home-hero__arrow--next" type="button" aria-label={t.homeNextStory} onClick={() => setHeroIndex((index) => (index + 1) % heroStories.length)}><ChevronRight aria-hidden="true" /></button>
-                <div className="home-hero__dots" aria-label={t.heroSliderLabel}>
-                  {heroStories.map((story, index) => <button key={story.id} type="button" className={index === heroIndex ? "is-active" : ""} aria-label={t.homeSlidePosition.replace("{current}", formatNumber(index + 1, locale)).replace("{total}", formatNumber(heroStories.length, locale))} aria-current={index === heroIndex ? "true" : undefined} onClick={() => setHeroIndex(index)} />)}
+                <button className="home-hero__arrow home-hero__arrow--prev" type="button" aria-label={t.homePreviousStory} onClick={() => moveHero(-1)}><ChevronLeft aria-hidden="true" size={23} strokeWidth={1.7} /></button>
+                <button className="home-hero__arrow home-hero__arrow--next" type="button" aria-label={t.homeNextStory} onClick={() => moveHero(1)}><ChevronRight aria-hidden="true" size={23} strokeWidth={1.7} /></button>
+                <div className="home-hero__dots" role="group" aria-label={t.heroSliderLabel}>
+                  {heroStories.map((story, index) => <button key={story.id} type="button" className={index === heroIndex ? "is-active" : ""} aria-label={t.homeSlidePosition.replace("{current}", formatNumber(index + 1, locale)).replace("{total}", formatNumber(heroStories.length, locale))} aria-current={index === heroIndex ? "true" : undefined} onClick={() => selectHero(index)} />)}
                 </div>
               </>
             )}
           </>
         ) : (
           <>
-            <img className="home-hero__image" src={DEFAULT_IMAGE} alt="" />
+            <Image className="home-hero__image" src={DEFAULT_IMAGE} alt="" fill priority sizes="100vw" quality={85} />
             <div className="home-hero__shade" />
             <div className="home-hero__empty">
               <span className="home-hero__eyebrow">{t.homeHeroLabel}</span>
@@ -376,7 +389,7 @@ export default function PortalKampungSapen() {
               <div className="news-card-grid">
                 {pageStories.map((story) => (
                   <article className="news-card" key={story.id}>
-                    <Link className="news-card__main" href={`/${locale}/berita/${story.id}`}>
+                    <Link className="news-card__link" href={`/${locale}/berita/${story.id}`}>
                       <span className="news-card__media">
                         <img src={story.image || DEFAULT_IMAGE} alt="" loading="lazy" onError={(event) => { event.currentTarget.src = DEFAULT_IMAGE; }} />
                         <span className="news-card__category">{categoryLabel(story.category, locale, t)}</span>
@@ -387,11 +400,11 @@ export default function PortalKampungSapen() {
                         <strong>{story.title}</strong>
                         {story.excerpt && <span className="news-card__excerpt">{story.excerpt}</span>}
                       </span>
-                    </Link>
-                    <footer className="news-card__footer">
+                    <span className="news-card__footer">
                       <span className="news-card__author"><span aria-hidden="true">{(story.author || t.redaction).trim().charAt(0).toLocaleUpperCase(locale)}</span>{story.author || t.redaction}</span>
-                      <Link href={`/${locale}/berita/${story.id}`}>{t.readNews}<ArrowRight aria-hidden="true" size={15} /></Link>
-                    </footer>
+                      <span className="news-card__read">{t.readNews}<ArrowRight aria-hidden="true" size={15} /></span>
+                    </span>
+                    </Link>
                   </article>
                 ))}
               </div>
@@ -430,7 +443,7 @@ export default function PortalKampungSapen() {
         <div className="home-wayang__inner">
           <Image src="/images/wayang-uwuh/galeri-pigura.webp" width={1200} height={896} sizes="(max-width: 680px) 100vw, 42vw" alt={t.homeWayangCardAlt} />
           <div className="home-wayang__copy">
-            <span className="home-wayang__icon"><Building2 aria-hidden="true" size={23} /></span>
+            <span className="home-wayang__icon"><Sparkles aria-hidden="true" size={23} /></span>
             <span className="home-wayang__eyebrow">{t.homeWayangCardTitle}</span>
             <h2>{t.homeWayangSectionTitle}</h2>
             <p>{t.homeWayangSectionText}</p>
@@ -443,7 +456,7 @@ export default function PortalKampungSapen() {
         <div className="news-footer__inner">
           <div className="news-footer__identity">
             <Link className="news-brand" href={`/${locale}`} aria-label={`${t.footerIdentity}, ${t.home}`}>
-              <span className="news-brand__mark"><Building2 aria-hidden="true" size={23} /></span>
+              <Image className="news-brand__logo" src="/images/sapen-logo-2x.png" width={225} height={88} alt={t.logoAlt} />
               <span className="news-brand__copy"><strong>{t.brand}</strong><small>{t.brandSubtitle}</small></span>
             </Link>
             <p><span><MapPin aria-hidden="true" size={16} /></span>{site.address[locale]}</p>

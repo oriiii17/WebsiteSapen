@@ -11,7 +11,7 @@
   padding-bottom: env(safe-area-inset-bottom);
   color: var(--wayang-ink);
   background-color: var(--sapen-warm);
-  background-image: linear-gradient(rgb(248 248 242 / 94%),rgb(248 248 242 / 94%)),url("/images/sapen-background-desktop.webp");
+  background-image: linear-gradient(rgb(248 248 244 / 94%),rgb(248 248 244 / 94%)),url("/images/sapen-background-v2-desktop.webp?v=2");
   background-size: 100% 100%,100% 100vh;
   background-position: center,center top;
   background-repeat: no-repeat,repeat-y;
@@ -29,7 +29,7 @@
 .wayang-header, .wayang-story, .wayang-education, .wayang-contact {
   color: #fff;
   background-color: var(--wayang-primary);
-  background-image: linear-gradient(rgb(51 68 55 / 94%),rgb(51 68 55 / 94%)),url("/images/sapen-background-desktop.webp");
+  background-image: linear-gradient(rgb(53 65 40 / 94%),rgb(53 65 40 / 94%)),url("/images/sapen-background-v2-desktop.webp?v=2");
   background-size: 100% 100%,100% 100vh;
   background-position: center,center top;
   background-repeat: no-repeat,repeat-y;
@@ -38,10 +38,10 @@
 .wayang-header__back, .wayang-header__tools { display: inline-flex; align-items: center; gap: 14px; }
 .wayang-header__back { min-height: 44px; color: #fff; font-weight: 600; text-decoration: none; }
 .wayang-header__back:hover { color: #e5ebe1; }
-.wayang-header__tools > span { color: #fff; font-weight: 700; }
+.wayang-header__logo { width: auto; height: 42px; object-fit: contain; }
 .wayang-header .site-locale-switch { color: #fff; }
 .wayang-header .site-locale-switch a[aria-current="page"] { color: #fff; text-decoration-color: #cad8c1; }
-.wayang-hero { padding: clamp(40px,7vw,82px) 0; background-color: var(--sapen-warm); background-image: linear-gradient(rgb(248 248 242 / 95%),rgb(248 248 242 / 95%)),url("/images/sapen-background-desktop.webp"); background-size: 100% 100%,100% 100vh; background-position: center,center top; background-repeat: no-repeat,repeat-y; }
+.wayang-hero { padding: clamp(40px,7vw,82px) 0; background-color: var(--sapen-warm); background-image: linear-gradient(rgb(248 248 244 / 95%),rgb(248 248 244 / 95%)),url("/images/sapen-background-v2-desktop.webp?v=2"); background-size: 100% 100%,100% 100vh; background-position: center,center top; background-repeat: no-repeat,repeat-y; }
 .wayang-hero__inner { display: grid; grid-template-columns: .85fr 1.15fr; align-items: center; gap: clamp(32px,6vw,76px); }
 .wayang-hero__copy { padding-block: 16px; }
 .wayang-hero__subtitle { max-width: 31ch; margin: 20px 0 28px; color: #48554a; font-size: clamp(1.15rem,2vw,1.45rem); font-weight: 600; line-height: 1.45; }
@@ -54,25 +54,38 @@
 .wayang-button--secondary:hover { border-color: var(--wayang-primary); background: #eff2eb; }
 .wayang-button svg { flex: 0 0 auto; }
 .wayang-hero__figure { position: relative; margin: 0; padding: 11px; border: 1px solid #d9dfd5; border-radius: 24px; background: #fff; box-shadow: 0 17px 38px rgb(33 48 36 / 12%); }
-.wayang-hero__figure img { width: 100%; height: auto; display: block; aspect-ratio: 1.34; border-radius: 16px; object-fit: cover; }
+.wayang-hero__figure img { width: 100%; height: auto; display: block; aspect-ratio: 4 / 5; border-radius: 16px; object-fit: cover; }
 .wayang-hero__figure figcaption { padding: 10px 3px 0; color: var(--wayang-muted); font-size: .8rem; }
 .wayang-gallery { padding: clamp(48px,7vw,80px) 0; background: #fff; }
 .wayang-gallery h2 { margin-bottom: 24px; }
-.wayang-gallery__grid { display: grid; grid-template-columns: 1.1fr 1fr .9fr; align-items: stretch; gap: 16px; }
-.wayang-gallery__grid figure { min-width: 0; margin: 0; overflow: hidden; border-radius: 20px; background: #eef0e9; }
-.wayang-gallery__grid img { width: 100%; height: 100%; display: block; aspect-ratio: 1.2; border-radius: 20px; object-fit: cover; transition: transform .35s ease; }
-.wayang-gallery__grid figure:hover img { transform: scale(1.025); }
+.wayang-gallery__grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: stretch; gap: 14px; }
+.wayang-gallery__photo { min-width: 0; overflow: hidden; padding: 0; border: 1px solid #d9ddce; border-radius: 17px; background: #eef0e9; cursor: zoom-in; }
+.wayang-gallery__photo img { width: 100%; height: auto; display: block; aspect-ratio: 4 / 5; object-fit: cover; transition: transform .5s ease; }
+.wayang-gallery__photo:hover img { transform: scale(1.04); }
+.wayang-gallery__photo:focus-visible { outline: 3px solid var(--wayang-primary); outline-offset: 3px; }
+.wayang-lightbox { position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; padding: 20px; background: rgb(20 28 18 / 92%); }
+.wayang-lightbox__dialog { position: relative; width: min(100%,1120px); height: min(100%,calc(100dvh - 40px)); display: grid; place-items: center; padding: 42px 62px 18px; outline: none; }
+.wayang-lightbox__viewer { width: 100%; height: 100%; display: grid; place-items: center; touch-action: pan-y; }
+.wayang-lightbox__image { width: auto; height: auto; max-width: 100%; max-height: calc(100dvh - 96px); border-radius: 12px; object-fit: contain; }
+.wayang-lightbox__close, .wayang-lightbox__arrow { position: absolute; z-index: 1; display: grid; place-items: center; border: 1px solid rgb(255 255 255 / 50%); border-radius: 50%; color: #fff; background: rgb(22 30 20 / 74%); cursor: pointer; }
+.wayang-lightbox__close { top: 5px; right: 5px; width: 48px; height: 48px; }
+.wayang-lightbox__arrow { top: 50%; width: 48px; height: 48px; transform: translateY(-50%); transition: background-color .18s ease,transform .18s ease; }
+.wayang-lightbox__arrow:hover { transform: translateY(-50%) scale(1.06); background: var(--wayang-primary); }
+.wayang-lightbox__arrow--previous { left: 4px; }
+.wayang-lightbox__arrow--next { right: 4px; }
+.wayang-lightbox button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; box-shadow: 0 0 0 6px #53603a; }
+@media (min-width: 761px) and (max-width: 1100px) { .wayang-gallery__grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 .wayang-story { width: 100%; display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(32px,7vw,96px); padding: 58px max(24px,calc((100% - 1160px)/2)) 68px; }
 .wayang-story h2, .wayang-education h2, .wayang-contact h2, .wayang-contact h3 { color: #fff; }
 .wayang-story p, .wayang-detail p, .wayang-education p { max-width: 72ch; margin: 0; font-size: 1rem; line-height: 1.85; }
 .wayang-story p, .wayang-education p { color: #eff2ec; }
-.wayang-detail { padding: clamp(44px,7vw,76px) 0; background-color: var(--sapen-warm); background-image: linear-gradient(rgb(248 248 242 / 95%),rgb(248 248 242 / 95%)),url("/images/sapen-background-desktop.webp"); background-size: 100% 100%,100% 100vh; background-position: center,center top; background-repeat: no-repeat,repeat-y; }
+.wayang-detail { padding: clamp(44px,7vw,76px) 0; background-color: var(--sapen-warm); background-image: linear-gradient(rgb(248 248 244 / 95%),rgb(248 248 244 / 95%)),url("/images/sapen-background-v2-desktop.webp?v=2"); background-size: 100% 100%,100% 100vh; background-position: center,center top; background-repeat: no-repeat,repeat-y; }
 .wayang-detail__grid { display: grid; grid-template-columns: .55fr 1.45fr; gap: clamp(28px,6vw,76px); }
 .wayang-detail h2 { margin: 0; }
 .wayang-detail p { color: #354238; }
 .wayang-education { width: 100%; padding: clamp(48px,7vw,80px) max(24px,calc((100% - 1160px)/2)); }
 .wayang-education p { max-width: 76ch; }
-.wayang-founder { padding: clamp(44px,7vw,74px) 24px; background-color: var(--sapen-warm); background-image: linear-gradient(rgb(248 248 242 / 96%),rgb(248 248 242 / 96%)),url("/images/sapen-background-desktop.webp"); background-size: 100% 100%,100% 100vh; background-position: center,center top; background-repeat: no-repeat,repeat-y; }
+.wayang-founder { padding: clamp(44px,7vw,74px) 24px; background-color: var(--sapen-warm); background-image: linear-gradient(rgb(248 248 244 / 96%),rgb(248 248 244 / 96%)),url("/images/sapen-background-v2-desktop.webp?v=2"); background-size: 100% 100%,100% 100vh; background-position: center,center top; background-repeat: no-repeat,repeat-y; }
 .wayang-founder__inner { display: grid; grid-template-columns: 240px minmax(0,1fr); align-items: center; gap: 34px; padding: 25px 32px; border: 1px solid #e0e5dc; border-radius: 24px; background: #fff; box-shadow: 0 10px 30px rgb(37 54 43 / 8%); }
 .wayang-founder img { width: 220px; height: 220px; display: block; border: 6px solid #edf1e9; border-radius: 50%; object-fit: cover; object-position: center 40%; }
 .wayang-founder h2 { margin-bottom: 9px; }
@@ -93,17 +106,17 @@
 .wayang-wave--story { --wave-divider-color: var(--wayang-primary); --wave-divider-background: #fff; }
 .wayang-wave--detail, .wayang-wave--founder { --wave-divider-color: var(--sapen-warm); --wave-divider-background: var(--wayang-primary); }
 .wayang-wave--education, .wayang-wave--contact, .wayang-wave--footer { --wave-divider-color: var(--sapen-warm); --wave-divider-background: var(--wayang-primary); }
-.wayang-footer { margin-top: auto; padding: 20px 24px; border-top: 1px solid var(--sapen-border); color: var(--wayang-primary); background-color: var(--sapen-warm); background-image: linear-gradient(rgb(248 248 242 / 95%),rgb(248 248 242 / 95%)),url("/images/sapen-background-desktop.webp"); background-size: 100% 100%,100% 100vh; background-position: center,center top; background-repeat: no-repeat,repeat-y; text-align: center; font-size: .82rem; }
+.wayang-footer { margin-top: auto; padding: 20px 24px; border-top: 1px solid var(--sapen-border); color: var(--wayang-primary); background-color: var(--sapen-warm); background-image: linear-gradient(rgb(248 248 244 / 95%),rgb(248 248 244 / 95%)),url("/images/sapen-background-v2-desktop.webp?v=2"); background-size: 100% 100%,100% 100vh; background-position: center,center top; background-repeat: no-repeat,repeat-y; text-align: center; font-size: .82rem; }
 .wayang-sticky-actions { display: none; }
 @media (max-width: 760px) {
-  .wayang-page { padding-bottom: calc(70px + env(safe-area-inset-bottom)); background-image: linear-gradient(rgb(248 248 242 / 94%),rgb(248 248 242 / 94%)),url("/images/sapen-background-mobile.webp"); }
-  .wayang-header, .wayang-story, .wayang-education, .wayang-contact { background-image: linear-gradient(rgb(51 68 55 / 94%),rgb(51 68 55 / 94%)),url("/images/sapen-background-mobile.webp"); }
-  .wayang-hero, .wayang-detail, .wayang-founder { background-image: linear-gradient(rgb(248 248 242 / 95%),rgb(248 248 242 / 95%)),url("/images/sapen-background-mobile.webp"); }
+  .wayang-page { padding-bottom: calc(70px + env(safe-area-inset-bottom)); background-image: linear-gradient(rgb(248 248 244 / 94%),rgb(248 248 244 / 94%)),url("/images/sapen-background-v2-mobile.webp?v=2"); }
+  .wayang-header, .wayang-story, .wayang-education, .wayang-contact { background-image: linear-gradient(rgb(53 65 40 / 94%),rgb(53 65 40 / 94%)),url("/images/sapen-background-v2-mobile.webp?v=2"); }
+  .wayang-hero, .wayang-detail, .wayang-founder { background-image: linear-gradient(rgb(248 248 244 / 95%),rgb(248 248 244 / 95%)),url("/images/sapen-background-v2-mobile.webp?v=2"); }
   .wayang-container, .wayang-header__inner, .wayang-hero__inner { width: calc(100% - 32px); }
   .wayang-header__inner { min-height: 60px; gap: 7px; }
-  .wayang-header__back { max-width: 55%; gap: 6px; font-size: .76rem; line-height: 1.3; }
+  .wayang-header__back { max-width: 45%; gap: 6px; font-size: .76rem; line-height: 1.3; }
   .wayang-header__tools { gap: 5px; }
-  .wayang-header__tools > span { display: none; }
+  .wayang-header__logo { height: 36px; }
   .wayang-header .site-locale-switch { gap: 3px; font-size: .78rem; }
   .wayang-header .site-locale-switch a { min-width: 27px; }
   .wayang-hero { padding-block: 32px 40px; }
@@ -112,20 +125,26 @@
   .wayang-hero__subtitle { margin: 13px 0 20px; font-size: 1.05rem; }
   .wayang-hero__actions { display: none; }
   .wayang-hero__figure { padding: 7px; border-radius: 19px; }
-  .wayang-hero__figure img { aspect-ratio: 1.25; border-radius: 13px; }
+  .wayang-hero__figure img { aspect-ratio: 4 / 5; border-radius: 13px; }
   .wayang-gallery { padding-block: 36px 42px; }
   .wayang-gallery h2 { margin-bottom: 19px; }
-  .wayang-gallery__grid { grid-template-columns: 1fr 1fr; gap: 9px; }
-  .wayang-gallery__grid figure:first-child { grid-row: span 2; }
-  .wayang-gallery__grid img { aspect-ratio: 1; border-radius: 15px; }
-  .wayang-gallery__grid figure:first-child img { height: 100%; aspect-ratio: auto; }
+  .wayang-gallery__grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+  .wayang-gallery__photo { border-radius: 14px; }
+  .wayang-gallery__photo img { aspect-ratio: 4 / 5; }
+  .wayang-lightbox { padding: 10px; }
+  .wayang-lightbox__dialog { width: 100%; height: calc(100dvh - 20px); padding: 56px 34px 18px; }
+  .wayang-lightbox__image { max-width: 100%; max-height: calc(100dvh - 96px); border-radius: 9px; }
+  .wayang-lightbox__close { top: 4px; right: 2px; width: 44px; height: 44px; }
+  .wayang-lightbox__arrow { width: 40px; height: 40px; }
+  .wayang-lightbox__arrow--previous { left: 0; }
+  .wayang-lightbox__arrow--next { right: 0; }
   .wayang-story { grid-template-columns: 1fr; gap: 29px; padding: 40px 18px 45px; }
   .wayang-story p, .wayang-detail p, .wayang-education p { font-size: .94rem; }
   .wayang-detail { padding-block: 38px; }
   .wayang-detail__grid { grid-template-columns: 1fr; gap: 12px; }
   .wayang-education { padding: 42px 18px; }
   .wayang-founder { padding: 35px 16px; }
-  .wayang-footer { background-image: linear-gradient(rgb(248 248 242 / 95%),rgb(248 248 242 / 95%)),url("/images/sapen-background-mobile.webp"); }
+  .wayang-footer { background-image: linear-gradient(rgb(248 248 244 / 95%),rgb(248 248 244 / 95%)),url("/images/sapen-background-v2-mobile.webp?v=2"); }
   .wayang-founder__inner { grid-template-columns: 1fr; justify-items: center; gap: 17px; padding: 23px 19px; border-radius: 20px; text-align: center; }
   .wayang-founder img { width: 170px; height: 170px; }
   .wayang-founder h2 { margin-bottom: 8px; }
@@ -139,6 +158,6 @@
   .wayang-sticky-actions .wayang-button svg { width: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wayang-button, .wayang-gallery__grid img { transition: none; }
-  .wayang-button:hover, .wayang-gallery__grid figure:hover img { transform: none; }
+  .wayang-button, .wayang-gallery__photo img, .wayang-lightbox__arrow { transition: none; }
+  .wayang-button:hover, .wayang-gallery__photo:hover img, .wayang-lightbox__arrow:hover { transform: none; }
 }

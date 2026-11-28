@@ -4,6 +4,8 @@ import "./admin-berita.css";
 import { useSiteFeedback } from "../../../components/site-feedback";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import NextImage from "next/image";
+import { WaveDivider } from "../../../components/wave-divider";
 import { 
   Plus, 
   Edit3, 
@@ -17,8 +19,7 @@ import {
   BookOpen,
   X,
   Loader2,
-  ListFilter,
-  Building2
+  ListFilter
 } from "lucide-react";
 
 interface BeritaItem {
@@ -51,21 +52,13 @@ const compressImageFile = (file: File): Promise<string> => {
       img.src = event.target?.result as string;
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        const MAX_WIDTH = 900;
-        const MAX_HEIGHT = 550;
+        const MAX_SIDE = 1600;
         let width = img.width;
         let height = img.height;
-
-        if (width > height) {
-          if (width > MAX_WIDTH) {
-            height = Math.round((height * MAX_WIDTH) / width);
-            width = MAX_WIDTH;
-          }
-        } else {
-          if (height > MAX_HEIGHT) {
-            width = Math.round((width * MAX_HEIGHT) / height);
-            height = MAX_HEIGHT;
-          }
+        if (Math.max(width, height) > MAX_SIDE) {
+          const ratio = MAX_SIDE / Math.max(width, height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
         }
 
         canvas.width = width;
@@ -73,8 +66,7 @@ const compressImageFile = (file: File): Promise<string> => {
         const ctx = canvas.getContext("2d");
         ctx?.drawImage(img, 0, 0, width, height);
 
-        // Kompresi ke format JPEG ringan (~60KB) yang langsung bisa disimpan di database
-        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.78);
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.85);
         resolve(compressedBase64);
       };
       img.onerror = () => {
@@ -294,8 +286,8 @@ export default function AdminBeritaPastiGantiFoto() {
       {/* HEADER DASBOR */}
       <header className="admin-news-header">
         <div className="admin-news-header__identity">
-          <div className="admin-news-header__mark" aria-hidden="true">
-            <Building2 size={23} />
+          <div className="admin-news-header__mark">
+            <NextImage src="/images/sapen-logo-2x.png" width={225} height={88} alt="Logo Kampung Sapen" priority />
           </div>
           <div>
             <h1>Kelola berita warga</h1>
@@ -307,9 +299,11 @@ export default function AdminBeritaPastiGantiFoto() {
           href="/" 
           className="admin-news-header__back"
         >
-          <ArrowLeft aria-hidden="true" size={17} /> Kembali ke portal warga
+          <ArrowLeft aria-hidden="true" size={17} /> Kembali ke portal
         </Link>
       </header>
+
+      <WaveDivider className="admin-news-wave" />
 
       {/* CONTAINER FORMULIR LEBAR */}
       <main className="admin-news-main">

@@ -3,6 +3,7 @@
 import "./article.css";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Clock3 } from "lucide-react";
 import { INITIAL_BERITA, getBeritaById } from "@/data/beritaData";
@@ -68,7 +69,7 @@ export default function HalamanBacaBeritaWarga() {
     <div className="article-page">
       <header className="article-header">
         <Link href={`/${locale}`} className="article-back"><ArrowLeft size={18} aria-hidden="true" /> {t.backToNews}</Link>
-        <div className="article-header__identity"><span>{t.brand}</span><LocaleSwitcher locale={locale} label={t.localeLabel} /></div>
+        <div className="article-header__identity"><Image src="/images/sapen-logo-2x.png" width={225} height={88} alt={t.logoAlt} priority /><LocaleSwitcher locale={locale} label={t.localeLabel} /></div>
       </header>
       {!loading && article && (
         <section className="article-title">
@@ -111,7 +112,9 @@ export default function HalamanBacaBeritaWarga() {
               <div className="article-related__list">
                 {related.map((story) => (
                   <Link href={`/${locale}/berita/${story.id}`} className="article-related__item" key={story.id}>
-                    <img src={story.image || DEFAULT_IMAGE} alt="" loading="lazy" onError={(event) => { event.currentTarget.src = DEFAULT_IMAGE; }} />
+                    <span className="article-related__media">
+                      <img src={story.image || DEFAULT_IMAGE} alt="" loading="lazy" onError={(event) => { event.currentTarget.src = DEFAULT_IMAGE; }} />
+                    </span>
                     <span className="article-related__copy">
                         <span className="article-related__meta"><b>{categoryLabel(story.category, locale, t)}</b><time>{formatNewsDate(story.date, locale)}</time></span>
                         <strong>{story.title}</strong>
